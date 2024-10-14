@@ -41,7 +41,6 @@ namespace MeuProjeto
                 {
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        // Definir o parâmetro
                         cmd.Parameters.AddWithValue("@idClassificacaoProduto", idClassificacaoProduto);
 
                         try
@@ -50,13 +49,11 @@ namespace MeuProjeto
                             {
                                 if (reader.Read())
                                 {
-                                    // Preencher os TextBoxes com os dados retornados
                                     txtSiglaClassificacaoProduto.Text = reader["sigla_classificacaoProduto"].ToString();
                                     txtNomeClassificacaoProduto.Text = reader["nome_classificacaoProduto"].ToString();
                                 }
                                 else
                                 {
-                                    // Limpar os campos se nenhum dado for encontrado
                                     txtSiglaClassificacaoProduto.Clear();
                                     txtNomeClassificacaoProduto.Clear();
                                     MessageBox.Show("Classificação não encontrada.");
@@ -85,7 +82,6 @@ namespace MeuProjeto
             }
             else
             {
-                // Limpar os campos se o ID não for válido
                 txtSiglaClassificacaoProduto.Clear();
                 txtNomeClassificacaoProduto.Clear();
             }
@@ -103,7 +99,6 @@ namespace MeuProjeto
                 {
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        // Definir os parâmetros
                         cmd.Parameters.AddWithValue("@idClassificacaoProduto", idClassificacaoProduto);
                         cmd.Parameters.AddWithValue("@siglaClassificacaoProduto", siglaClassificacaoProduto);
                         cmd.Parameters.AddWithValue("@nomeClassificacaoProduto", nomeClassificacaoProduto);
@@ -134,13 +129,10 @@ namespace MeuProjeto
         }
 
         // Evento do Botão para Atualizar a Classificação
-        
     private void button1_Click(object sender, EventArgs e)
         {
-            {
                 try
                 {
-                    // Verificar se todos os campos foram preenchidos
                     if (string.IsNullOrEmpty(txtIdClassificacaoProduto.Text) ||
                         string.IsNullOrEmpty(txtSiglaClassificacaoProduto.Text) ||
                         string.IsNullOrEmpty(txtNomeClassificacaoProduto.Text))
@@ -149,12 +141,10 @@ namespace MeuProjeto
                         return;
                     }
 
-                    // Capturar os valores dos TextBoxes
                     int idClassificacaoProduto = Convert.ToInt32(txtIdClassificacaoProduto.Text);
                     string siglaClassificacaoProduto = txtSiglaClassificacaoProduto.Text;
                     string nomeClassificacaoProduto = txtNomeClassificacaoProduto.Text;
 
-                    // Chamar o método para atualizar no banco de dados
                     AtualizarClassificacaoProduto(idClassificacaoProduto, siglaClassificacaoProduto, nomeClassificacaoProduto);
                 }
                 catch (FormatException ex)
@@ -165,22 +155,7 @@ namespace MeuProjeto
                 {
                     MessageBox.Show("Erro inesperado: " + ex.Message);
                 }
-            }
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void AlterarClassificacao_Load(object sender, EventArgs e)
-        {
-
         }
     }
 }

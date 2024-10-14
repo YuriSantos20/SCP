@@ -86,17 +86,13 @@ namespace MeuProjeto
             {
                 try
                 {
-                    // Verificar se o campo ID da Classificação está preenchido
                     if (string.IsNullOrEmpty(txtIdClassificacaoProduto.Text))
                     {
                         MessageBox.Show("Por favor, insira o ID da classificação para exclusão.");
                         return;
                     }
 
-                    // Capturar o ID da Classificação
                     int idClassificacaoProduto = Convert.ToInt32(txtIdClassificacaoProduto.Text);
-
-                    // Chamar o método para excluir no banco de dados
                     ExcluirClassificacaoProduto(idClassificacaoProduto);
                 }
                 catch (FormatException ex)

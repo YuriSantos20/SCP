@@ -6,7 +6,6 @@ namespace MeuProjeto
 {
     public partial class ExcluirProduto : Form
     {
-        // String de Conexão (Substitua pelos seus detalhes)
         string connectionString = "server=localhost;database=conexao_SCP;uid=root;pwd=1234;";
 
         public ExcluirProduto()
@@ -14,7 +13,6 @@ namespace MeuProjeto
             InitializeComponent();
         }
 
-        // Método para Conectar ao Banco de Dados
         private MySqlConnection GetConnection()
         {
             MySqlConnection connection = new MySqlConnection(connectionString);
@@ -37,21 +35,17 @@ namespace MeuProjeto
 
             using (MySqlConnection connection = GetConnection())
             {
-                // Verificar se a conexão é válida
                 if (connection != null && connection.State == System.Data.ConnectionState.Open)
                 {
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
-                        // Definir o parâmetro
                         cmd.Parameters.AddWithValue("@idProduto", idProduto);
-
                         try
                         {
                             int result = cmd.ExecuteNonQuery();  // Executar a exclusão
                             if (result > 0)
                             {
                                 MessageBox.Show("Produto excluído com sucesso!");
-                                // Limpar o campo após a exclusão
                                 txtIdProduto.Clear();
                             }
                             else
@@ -82,17 +76,13 @@ namespace MeuProjeto
         {
             try
             {
-                // Verificar se o campo ID do Produto está preenchido
                 if (string.IsNullOrEmpty(txtIdProduto.Text))
                 {
                     MessageBox.Show("Por favor, insira o ID do produto para exclusão.");
                     return;
                 }
 
-                // Capturar o ID do Produto
                 int idProduto = Convert.ToInt32(txtIdProduto.Text);
-
-                // Chamar o método para excluir no banco de dados
                 ExcluirProdutodoBanco(idProduto);
             }
             catch (FormatException ex)

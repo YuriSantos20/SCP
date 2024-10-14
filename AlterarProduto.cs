@@ -6,7 +6,6 @@ namespace MeuProjeto
 {
     public partial class AlterarProdutos : Form
     {
-        // String de Conexão (Substitua pelos seus detalhes)
         string connectionString = "server=localhost;database=conexao_SCP;uid=root;pwd=1234;";
 
         public AlterarProdutos()

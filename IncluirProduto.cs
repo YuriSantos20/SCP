@@ -44,7 +44,6 @@ namespace MeuProjeto
                 using (MySqlCommand cmd = new MySqlCommand(query, connection))
                 {
                     // Passando os parâmetros
-                    cmd.Parameters.AddWithValue("@idProduto", idProduto);
                     cmd.Parameters.AddWithValue("@nome", nome);
                     cmd.Parameters.AddWithValue("@quantidadeEstoque", quantidadeEstoque);
                     cmd.Parameters.AddWithValue("@preco", preco);
@@ -78,19 +77,15 @@ namespace MeuProjeto
 
         private void btnCadastrar_Click_1(object sender, EventArgs e)
         {
-            // Captura os valores dos TextBoxes
-            int idProduto = Convert.ToInt32(txtIdProduto.Text);
             string nome = txtNome.Text;
             int quantidadeEstoque = Convert.ToInt32(txtQuantidadeEstoque.Text);
             double preco = Convert.ToDouble(txtPreco.Text);
             string unidade = txtUnidade.Text;
             string sigla_classificacaoproduto = comboBoxClassificacao.SelectedItem.ToString();
 
-
             // Chama o método para inserir no banco de dados
             InserirProduto(idProduto, nome, quantidadeEstoque, preco, unidade, sigla_classificacaoproduto);
         }
-        // Método para preencher o ComboBox com as classificações (siglas)
         private void PreencherComboBoxClassificacoes()
         {
             string query = "SELECT sigla_classificacaoProduto FROM classificacaoproduto";

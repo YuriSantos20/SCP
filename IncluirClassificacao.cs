@@ -94,7 +94,6 @@ namespace MeuProjeto
                 }
 
                 // Capturar os valores dos TextBoxes
-                int idClassificacaoProduto = Convert.ToInt32(txtIdClassificacaoProduto.Text);
                 string siglaClassificacaoProduto = txtSiglaClassificacaoProduto.Text;
                 string nomeClassificacaoProduto = txtNomeClassificacaoProduto.Text;
 
