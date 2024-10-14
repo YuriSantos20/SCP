@@ -1,6 +1,7 @@
 ﻿using System;
 using MySql.Data.MySqlClient;
 using System.Windows.Forms;
+using System.Data;
 
 namespace MeuProjeto
 {
@@ -12,6 +13,7 @@ namespace MeuProjeto
         public ExcluirClassificacao()
         {
             InitializeComponent();
+            CarregarClassificacoes();
         }
 
         // Método para Conectar ao Banco de Dados
@@ -29,6 +31,28 @@ namespace MeuProjeto
                 return null;  // Retorna null se falhar ao abrir
             }
         }
+        private void CarregarClassificacoes()
+        {
+            string query = "SELECT id_classificacaoProduto, sigla_classificacaoProduto, nome_classificacaoProduto FROM classificacaoproduto";
+
+            using (MySqlConnection connection = GetConnection())
+            {
+                if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                {
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dataGridView1.DataSource = dt; // Definir a fonte de dados do DataGridView
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Falha ao conectar ao banco de dados.");
+                }
+            }
+        }
+
 
         // Método para Excluir Classificação no Banco de Dados
         private void ExcluirClassificacaoProduto(int idClassificacaoProduto)
@@ -50,8 +74,8 @@ namespace MeuProjeto
                             if (result > 0)
                             {
                                 MessageBox.Show("Classificação excluída com sucesso!");
-                                // Limpar o campo após a exclusão
-                                txtIdClassificacaoProduto.Clear();
+                                txtIdClassificacaoProduto.Clear(); // Limpar o campo após a exclusão
+                                CarregarClassificacoes(); // Recarregar as classificações após a exclusão
                             }
                             else
                             {
@@ -72,8 +96,8 @@ namespace MeuProjeto
         }
 
         // Evento do Botão para Excluir Classificação
-       
-        
+
+
 
         // Evento para quando o campo ID da Classificação mudar
         private void txtIdClassificacaoProduto_TextChanged(object sender, EventArgs e)
@@ -109,6 +133,18 @@ namespace MeuProjeto
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            {
+                if (e.RowIndex >= 0) // Verifica se a linha clicada é válida
+                {
+                    DataGridViewRow row = dataGridView1.Rows[e.RowIndex]; // Obtém a linha clicada
+                    int idClassificacaoProduto = Convert.ToInt32(row.Cells["id_classificacaoProduto"].Value); // Obtém o ID da classificação
+                    txtIdClassificacaoProduto.Text = idClassificacaoProduto.ToString(); // Preenche o txtIdClassificacaoProduto
+                }
+            }
         }
     }
 }

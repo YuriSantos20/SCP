@@ -14,6 +14,7 @@ namespace MeuProjeto
         {
             InitializeComponent();
             PreencherComboBoxClassificacoes();
+            PreencherComboBoxFornecedores();
         }
 
         // Método para Conectar ao Banco de Dados
@@ -34,10 +35,10 @@ namespace MeuProjeto
         }
 
         // Método para Inserir Produto no Banco de Dados
-        private void InserirProduto(int idProduto, string nome, int quantidadeEstoque, double preco, string unidade, string sigla_classificacaoproduto)
+        private void InserirProduto(string nome, int quantidadeEstoque, double preco, string unidade, string sigla_classificacaoproduto, int id_fornecedor)
         {
-            string query = "INSERT INTO produto (id_produto, nome, quantidade_estoque, preco, unidade, sigla_classificacaoproduto) " +
-                           "VALUES (@idProduto, @nome, @quantidadeEstoque, @preco, @unidade, @sigla_classificacaoproduto)";
+            string query = "INSERT INTO produto (nome, quantidade_estoque, preco, unidade, sigla_classificacaoproduto, id_fornecedor) " +
+                           "VALUES (@nome, @quantidadeEstoque, @preco, @unidade, @sigla_classificacaoproduto, @id_fornecedor)";
 
             using (MySqlConnection connection = GetConnection())
             {
@@ -48,7 +49,8 @@ namespace MeuProjeto
                     cmd.Parameters.AddWithValue("@quantidadeEstoque", quantidadeEstoque);
                     cmd.Parameters.AddWithValue("@preco", preco);
                     cmd.Parameters.AddWithValue("@unidade", unidade);
-                    cmd.Parameters.AddWithValue("@sigla_Classificacaoproduto", sigla_classificacaoproduto);
+                    cmd.Parameters.AddWithValue("@sigla_classificacaoproduto", sigla_classificacaoproduto);
+                    cmd.Parameters.AddWithValue("@id_fornecedor", id_fornecedor);
 
                     try
                     {
@@ -81,10 +83,14 @@ namespace MeuProjeto
             int quantidadeEstoque = Convert.ToInt32(txtQuantidadeEstoque.Text);
             double preco = Convert.ToDouble(txtPreco.Text);
             string unidade = txtUnidade.Text;
-            string sigla_classificacaoproduto = comboBoxClassificacao.SelectedItem.ToString();
+            string sigla_classificacaoProduto = comboBoxClassificacao.SelectedItem.ToString();
+
+            // Obtenha o fornecedor selecionado como DataRowView
+            var fornecedorSelecionado = (DataRowView)comboBoxFornecedor.SelectedItem;
+            int id_fornecedor = (int)fornecedorSelecionado["id_fornecedor"];  // Acesse o id do fornecedor
 
             // Chama o método para inserir no banco de dados
-            InserirProduto(idProduto, nome, quantidadeEstoque, preco, unidade, sigla_classificacaoproduto);
+            InserirProduto(nome, quantidadeEstoque, preco, unidade, sigla_classificacaoProduto, id_fornecedor);
         }
         private void PreencherComboBoxClassificacoes()
         {
@@ -110,6 +116,43 @@ namespace MeuProjeto
                         catch (MySqlException ex)
                         {
                             MessageBox.Show("Erro ao carregar classificações: " + ex.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Falha ao conectar ao banco de dados.");
+                }
+            }
+        }
+        private void PreencherComboBoxFornecedores()
+        {
+            string query = "SELECT id_fornecedor, nome FROM fornecedor"; // Ajuste conforme o nome correto da coluna
+
+            using (MySqlConnection connection = GetConnection())
+            {
+                if (connection != null && connection.State == ConnectionState.Open)
+                {
+                    using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                    {
+                        try
+                        {
+                            using (MySqlDataReader reader = cmd.ExecuteReader())
+                            {
+                                DataTable dt = new DataTable();
+                                dt.Load(reader);
+
+                                // Defina as propriedades DisplayMember e ValueMember
+                                comboBoxFornecedor.DisplayMember = "nome";  // Nome da coluna que você quer mostrar
+                                comboBoxFornecedor.ValueMember = "id_fornecedor";  // Coluna que será usada internamente
+
+                                // Atribui o DataTable como fonte de dados
+                                comboBoxFornecedor.DataSource = dt;
+                            }
+                        }
+                        catch (MySqlException ex)
+                        {
+                            MessageBox.Show("Erro ao carregar fornecedores: " + ex.Message);
                         }
                     }
                 }

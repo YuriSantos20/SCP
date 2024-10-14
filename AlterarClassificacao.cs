@@ -1,6 +1,8 @@
 ﻿using System;
-using MySql.Data.MySqlClient;
+using System.Data;
 using System.Windows.Forms;
+using MySql.Data.MySqlClient;
+using MySqlX.XDevAPI.Common;
 
 namespace MeuProjeto
 {
@@ -12,6 +14,7 @@ namespace MeuProjeto
         public AlterarClassificacao()
         {
             InitializeComponent();
+            CarregarClassificacoes();
         }
 
         // Método para Conectar ao Banco de Dados
@@ -30,10 +33,33 @@ namespace MeuProjeto
             }
         }
 
+        // Método para Carregar Classificações no DataGridView
+        private void CarregarClassificacoes()
+        {
+            string query = "SELECT id_classificacaoProduto, sigla_classificacaoProduto, nome_classificacaoProduto FROM classificacaoproduto";
+
+            using (MySqlConnection connection = GetConnection())
+            {
+                if (connection != null && connection.State == System.Data.ConnectionState.Open)
+                {
+                    using (MySqlDataAdapter adapter = new MySqlDataAdapter(query, connection))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        dataGridViewClassificacoes1.DataSource = dt;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Falha ao conectar ao banco de dados.");
+                }
+            }
+        }
+
         // Método para Preencher os Campos ao Inserir o ID da Classificação
         private void PreencherCamposClassificacao(int idClassificacaoProduto)
         {
-            string query = "SELECT sigla_classificacaoProduto, nome_classificacaoProduto FROM classificacao_produto WHERE id_classificacaoProduto = @idClassificacaoProduto";
+            string query = "SELECT sigla_classificacaoProduto, nome_classificacaoProduto FROM classificacaoproduto WHERE id_classificacaoProduto = @idClassificacaoProduto";
 
             using (MySqlConnection connection = GetConnection())
             {
@@ -49,13 +75,13 @@ namespace MeuProjeto
                             {
                                 if (reader.Read())
                                 {
-                                    txtSiglaClassificacaoProduto.Text = reader["sigla_classificacaoProduto"].ToString();
-                                    txtNomeClassificacaoProduto.Text = reader["nome_classificacaoProduto"].ToString();
+                                    txtSiglaClassificacaoProduto1.Text = reader["sigla_classificacaoProduto"].ToString();
+                                    txtNomeClassificacaoProduto1.Text = reader["nome_classificacaoProduto"].ToString();
                                 }
                                 else
                                 {
-                                    txtSiglaClassificacaoProduto.Clear();
-                                    txtNomeClassificacaoProduto.Clear();
+                                    txtSiglaClassificacaoProduto1.Clear();
+                                    txtNomeClassificacaoProduto1.Clear();
                                     MessageBox.Show("Classificação não encontrada.");
                                 }
                             }
@@ -76,21 +102,21 @@ namespace MeuProjeto
         // Evento do TextBox txtIdClassificacaoProduto para Autocomplete
         private void txtIdClassificacaoProduto_TextChanged(object sender, EventArgs e)
         {
-            if (int.TryParse(txtIdClassificacaoProduto.Text, out int idClassificacaoProduto))
+            if (int.TryParse(txtIdClassificacaoProduto1.Text, out int idClassificacaoProduto))
             {
                 PreencherCamposClassificacao(idClassificacaoProduto);
             }
             else
             {
-                txtSiglaClassificacaoProduto.Clear();
-                txtNomeClassificacaoProduto.Clear();
+                txtSiglaClassificacaoProduto1.Clear();
+                txtNomeClassificacaoProduto1.Clear();
             }
         }
 
         // Método para Atualizar a Classificação no Banco de Dados
         private void AtualizarClassificacaoProduto(int idClassificacaoProduto, string siglaClassificacaoProduto, string nomeClassificacaoProduto)
         {
-            string query = "UPDATE classificacaoproduto SET sigla_classificacaoProduto = @siglaClassificacaoProduto, nome_classificacaoProduto = @nomeClassificacaoProduto " +
+            string query = "UPDATE classificacaoproduto SET sigla_classificacaoProduto = @siglaClassificacaoProduto, nome_classificacaoProduto = @nome_classificacaoProduto " +
                            "WHERE id_classificacaoProduto = @idClassificacaoProduto";
 
             using (MySqlConnection connection = GetConnection())
@@ -101,7 +127,7 @@ namespace MeuProjeto
                     {
                         cmd.Parameters.AddWithValue("@idClassificacaoProduto", idClassificacaoProduto);
                         cmd.Parameters.AddWithValue("@siglaClassificacaoProduto", siglaClassificacaoProduto);
-                        cmd.Parameters.AddWithValue("@nomeClassificacaoProduto", nomeClassificacaoProduto);
+                        cmd.Parameters.AddWithValue("@nome_classificacaoProduto", nomeClassificacaoProduto);
 
                         try
                         {
@@ -109,6 +135,12 @@ namespace MeuProjeto
                             if (result > 0)
                             {
                                 MessageBox.Show("Classificação atualizada com sucesso!");
+                                CarregarClassificacoes(); // Recarregar após a atualização
+
+                                // Limpar os campos após a atualização
+                                txtIdClassificacaoProduto1.Clear();
+                                txtSiglaClassificacaoProduto1.Clear();
+                                txtNomeClassificacaoProduto1.Clear();
                             }
                             else
                             {
@@ -128,23 +160,50 @@ namespace MeuProjeto
             }
         }
 
+
         // Evento do Botão para Atualizar a Classificação
-    private void button1_Click(object sender, EventArgs e)
+
+
+
+        private void button2_Click(object sender, EventArgs e)
         {
+            
+        }
+
+        private void AlterarClassificacao_Load(object sender, EventArgs e)
+        {
+            CarregarClassificacoes(); // Carregar classificações ao abrir o formulário
+        }
+
+        
+        
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            {
                 try
                 {
-                    if (string.IsNullOrEmpty(txtIdClassificacaoProduto.Text) ||
-                        string.IsNullOrEmpty(txtSiglaClassificacaoProduto.Text) ||
-                        string.IsNullOrEmpty(txtNomeClassificacaoProduto.Text))
+                    // Verificar se todos os campos estão preenchidos
+                    if (string.IsNullOrEmpty(txtIdClassificacaoProduto1.Text) ||
+                        string.IsNullOrEmpty(txtSiglaClassificacaoProduto1.Text) ||
+                        string.IsNullOrEmpty(txtNomeClassificacaoProduto1.Text))
                     {
                         MessageBox.Show("Por favor, preencha todos os campos.");
                         return;
                     }
 
-                    int idClassificacaoProduto = Convert.ToInt32(txtIdClassificacaoProduto.Text);
-                    string siglaClassificacaoProduto = txtSiglaClassificacaoProduto.Text;
-                    string nomeClassificacaoProduto = txtNomeClassificacaoProduto.Text;
+                    // Tentar converter o ID da classificação para inteiro
+                    if (!int.TryParse(txtIdClassificacaoProduto1.Text, out int idClassificacaoProduto))
+                    {
+                        MessageBox.Show("ID da classificação inválido.");
+                        return;
+                    }
 
+                    // Capturar os valores dos campos
+                    string siglaClassificacaoProduto = txtSiglaClassificacaoProduto1.Text;
+                    string nomeClassificacaoProduto = txtNomeClassificacaoProduto1.Text;
+
+                    // Chamar o método de atualização
                     AtualizarClassificacaoProduto(idClassificacaoProduto, siglaClassificacaoProduto, nomeClassificacaoProduto);
                 }
                 catch (FormatException ex)
@@ -155,7 +214,25 @@ namespace MeuProjeto
                 {
                     MessageBox.Show("Erro inesperado: " + ex.Message);
                 }
+            }
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void dataGridViewClassificacoes1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            {
+                if (e.RowIndex >= 0) // Verifica se a linha é válida
+                {
+                    DataGridViewRow row = dataGridViewClassificacoes1.Rows[e.RowIndex];
+                    int idClassificacaoProduto = Convert.ToInt32(row.Cells["id_classificacaoProduto"].Value);
+                    txtIdClassificacaoProduto1.Text = idClassificacaoProduto.ToString(); // Preencher o TextBox
+                    PreencherCamposClassificacao(idClassificacaoProduto);
+                }
+            }
         }
     }
 }

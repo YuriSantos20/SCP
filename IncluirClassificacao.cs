@@ -31,10 +31,10 @@ namespace MeuProjeto
         }
 
         // Método para Incluir Classificação no Banco de Dados
-        private void IncluirClassificacaoProduto(int idClassificacaoProduto, string siglaClassificacaoProduto, string nomeClassificacaoProduto)
+        private void IncluirClassificacaoProduto(string siglaClassificacaoProduto, string nomeClassificacaoProduto)
         {
-            string query = "INSERT INTO classificacaoproduto (id_classificacaoProduto, sigla_classificacaoProduto, nome_classificacaoProduto) " +
-                           "VALUES (@idClassificacaoProduto, @siglaClassificacaoProduto, @nomeClassificacaoProduto)";
+            string query = "INSERT INTO classificacaoproduto (sigla_classificacaoProduto, nome_classificacaoProduto) " +
+                           "VALUES ( @siglaClassificacaoProduto, @nomeClassificacaoProduto)";
 
             using (MySqlConnection connection = GetConnection())
             {
@@ -43,7 +43,7 @@ namespace MeuProjeto
                     using (MySqlCommand cmd = new MySqlCommand(query, connection))
                     {
                         // Definir os parâmetros da consulta
-                        cmd.Parameters.AddWithValue("@idClassificacaoProduto", idClassificacaoProduto);
+                        
                         cmd.Parameters.AddWithValue("@siglaClassificacaoProduto", siglaClassificacaoProduto);
                         cmd.Parameters.AddWithValue("@nomeClassificacaoProduto", nomeClassificacaoProduto);
 
@@ -54,7 +54,7 @@ namespace MeuProjeto
                             {
                                 MessageBox.Show("Classificação incluída com sucesso!");
                                 // Limpar os campos após a inclusão
-                                txtIdClassificacaoProduto.Clear();
+                                
                                 txtSiglaClassificacaoProduto.Clear();
                                 txtNomeClassificacaoProduto.Clear();
                             }
@@ -85,8 +85,7 @@ namespace MeuProjeto
             try
             {
                 // Verificar se todos os campos foram preenchidos
-                if (string.IsNullOrEmpty(txtIdClassificacaoProduto.Text) ||
-                    string.IsNullOrEmpty(txtSiglaClassificacaoProduto.Text) ||
+                if (string.IsNullOrEmpty(txtSiglaClassificacaoProduto.Text) ||
                     string.IsNullOrEmpty(txtNomeClassificacaoProduto.Text))
                 {
                     MessageBox.Show("Por favor, preencha todos os campos.");
@@ -98,7 +97,7 @@ namespace MeuProjeto
                 string nomeClassificacaoProduto = txtNomeClassificacaoProduto.Text;
 
                 // Chamar o método para incluir no banco de dados
-                IncluirClassificacaoProduto(idClassificacaoProduto, siglaClassificacaoProduto, nomeClassificacaoProduto);
+                IncluirClassificacaoProduto(siglaClassificacaoProduto, nomeClassificacaoProduto);
             }
             catch (FormatException ex)
             {

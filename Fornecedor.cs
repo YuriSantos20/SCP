@@ -11,47 +11,34 @@ using System.Windows.Forms;
 
 namespace SistemaComercio1
 {
-    public partial class Form1 : Form
+    public partial class Fornecedor : Form
     {
-        public Form1()
+        public Fornecedor()
         {
             InitializeComponent();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            ConsultarProduto form2 = new ConsultarProduto();
-            form2.Show();
-        }
-
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            ConsultarClassificacao form2 = new ConsultarClassificacao();
-            form2.Show();
-
+            IncluirFornecedor cadastroclassificacao = new IncluirFornecedor();
+            cadastroclassificacao.Show();
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ConsultarClientes cadastroclassificacao = new ConsultarClientes();
+            AlterarFornecedores cadastroclassificacao = new AlterarFornecedores();
             cadastroclassificacao.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            ConsultarFornecedores cadastroclassificacao = new ConsultarFornecedores();
+            ExcluirFornecedores cadastroclassificacao = new ExcluirFornecedores();
             cadastroclassificacao.Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            ControleVendas cadastroclassificacao = new ControleVendas();
-            cadastroclassificacao.Show();
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            ContaReceber cadastroclassificacao = new ContaReceber();
+            ConsultarFornecedores cadastroclassificacao = new ConsultarFornecedores();
             cadastroclassificacao.Show();
         }
     }

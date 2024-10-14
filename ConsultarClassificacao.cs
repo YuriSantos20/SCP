@@ -71,5 +71,31 @@ namespace MeuProjeto
         {
             this.Close();
         }
+
+        private void dataGridViewClassificacoes_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void btIncluir_Click(object sender, EventArgs e)
+        {
+            IncluirClassificacao formIncluir = new IncluirClassificacao();
+            formIncluir.FormClosed += (s, args) => CarregarDados();  // Recarregar os dados quando a janela for fechada
+            formIncluir.Show();
+        }
+
+        private void btAlterar_Click(object sender, EventArgs e)
+        {
+            AlterarClassificacao formAlterar = new AlterarClassificacao();
+            formAlterar.FormClosed += (s, args) => CarregarDados();  // Recarregar os dados quando a janela for fechada
+            formAlterar.Show();
+        }
+
+        private void btExcluir_Click(object sender, EventArgs e)
+        {
+            ExcluirClassificacao formExcluir = new ExcluirClassificacao();
+            formExcluir.FormClosed += (s, args) => CarregarDados();  // Recarregar os dados quando a janela for fechada
+            formExcluir.Show();
+        }
     }
 }

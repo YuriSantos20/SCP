@@ -104,11 +104,29 @@
     <Compile Include="AlterarClassificacao.Designer.cs">
       <DependentUpon>AlterarClassificacao.cs</DependentUpon>
     </Compile>
+    <Compile Include="AlterarClientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlterarClientes.Designer.cs">
+      <DependentUpon>AlterarClientes.cs</DependentUpon>
+    </Compile>
+    <Compile Include="AlterarFornecedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AlterarFornecedor.Designer.cs">
+      <DependentUpon>AlterarFornecedor.cs</DependentUpon>
+    </Compile>
     <Compile Include="Classificacao.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Classificacao.Designer.cs">
       <DependentUpon>Classificacao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Clientes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Clientes.Designer.cs">
+      <DependentUpon>Clientes.cs</DependentUpon>
     </Compile>
     <Compile Include="ConsultarClassificacao.cs">
       <SubType>Form</SubType>
@@ -116,17 +134,53 @@
     <Compile Include="ConsultarClassificacao.Designer.cs">
       <DependentUpon>ConsultarClassificacao.cs</DependentUpon>
     </Compile>
+    <Compile Include="ConsultarCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConsultarCliente.Designer.cs">
+      <DependentUpon>ConsultarCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ConsultarFornecedores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConsultarFornecedores.Designer.cs">
+      <DependentUpon>ConsultarFornecedores.cs</DependentUpon>
+    </Compile>
     <Compile Include="ConsultarProduto.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ConsultarProduto.Designer.cs">
       <DependentUpon>ConsultarProduto.cs</DependentUpon>
     </Compile>
+    <Compile Include="ContaReceber.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ContaReceber.Designer.cs">
+      <DependentUpon>ContaReceber.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControleVendas.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControleVendas.Designer.cs">
+      <DependentUpon>ControleVendas.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExcluirClassificacao.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ExcluirClassificacao.Designer.cs">
       <DependentUpon>ExcluirClassificacao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExcluirCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExcluirCliente.Designer.cs">
+      <DependentUpon>ExcluirCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExcluirFornecedores.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ExcluirFornecedores.Designer.cs">
+      <DependentUpon>ExcluirFornecedores.cs</DependentUpon>
     </Compile>
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -152,11 +206,29 @@
     <Compile Include="ExcluirProduto.Designer.cs">
       <DependentUpon>ExcluirProduto.cs</DependentUpon>
     </Compile>
+    <Compile Include="Fornecedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Fornecedor.Designer.cs">
+      <DependentUpon>Fornecedor.cs</DependentUpon>
+    </Compile>
     <Compile Include="IncluirClassificacao.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="IncluirClassificacao.Designer.cs">
       <DependentUpon>IncluirClassificacao.cs</DependentUpon>
+    </Compile>
+    <Compile Include="incluirCliente.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="incluirCliente.Designer.cs">
+      <DependentUpon>incluirCliente.cs</DependentUpon>
+    </Compile>
+    <Compile Include="IncluirFornecedor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IncluirFornecedor.Designer.cs">
+      <DependentUpon>IncluirFornecedor.cs</DependentUpon>
     </Compile>
     <Compile Include="IncluirProduto.cs">
       <SubType>Form</SubType>
@@ -169,6 +241,12 @@
     <EmbeddedResource Include="AlterarClassificacao.resx">
       <DependentUpon>AlterarClassificacao.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="AlterarClientes.resx">
+      <DependentUpon>AlterarClientes.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AlterarFornecedor.resx">
+      <DependentUpon>AlterarFornecedor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AlterarProduto.resx">
       <DependentUpon>AlterarProduto.cs</DependentUpon>
     </EmbeddedResource>
@@ -178,14 +256,35 @@
     <EmbeddedResource Include="Classificacao.resx">
       <DependentUpon>Classificacao.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Clientes.resx">
+      <DependentUpon>Clientes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ConsultarClassificacao.resx">
       <DependentUpon>ConsultarClassificacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConsultarCliente.resx">
+      <DependentUpon>ConsultarCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ConsultarFornecedores.resx">
+      <DependentUpon>ConsultarFornecedores.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ConsultarProduto.resx">
       <DependentUpon>ConsultarProduto.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="ContaReceber.resx">
+      <DependentUpon>ContaReceber.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControleVendas.resx">
+      <DependentUpon>ControleVendas.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ExcluirClassificacao.resx">
       <DependentUpon>ExcluirClassificacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExcluirCliente.resx">
+      <DependentUpon>ExcluirCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ExcluirFornecedores.resx">
+      <DependentUpon>ExcluirFornecedores.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
@@ -193,8 +292,17 @@
     <EmbeddedResource Include="ExcluirProduto.resx">
       <DependentUpon>ExcluirProduto.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Fornecedor.resx">
+      <DependentUpon>Fornecedor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="IncluirClassificacao.resx">
       <DependentUpon>IncluirClassificacao.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="incluirCliente.resx">
+      <DependentUpon>incluirCliente.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IncluirFornecedor.resx">
+      <DependentUpon>IncluirFornecedor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="IncluirProduto.resx">
       <DependentUpon>IncluirProduto.cs</DependentUpon>
