@@ -216,66 +216,103 @@ namespace SistemaComercio1
         {
             if (dataGridViewVendas.Rows.Count > 0)
             {
-                string query = "UPDATE produto SET quantidade_estoque = quantidade_estoque - @quantidade WHERE nome = @nome";
-
                 using (MySqlConnection connection = GetConnection())
                 {
                     if (connection != null && connection.State == ConnectionState.Open)
                     {
-                        using (MySqlCommand cmd = new MySqlCommand(query, connection))
+                        using (MySqlTransaction transaction = connection.BeginTransaction())
                         {
-                            foreach (DataGridViewRow row in dataGridViewVendas.Rows)
+                            try
                             {
-                                if (row.Cells["Nome"].Value != null)
+                                // Inserir a venda na tabela de vendas
+                                int idCliente = (int)comboBoxClientes.SelectedValue; // Pega o ID do cliente selecionado
+                                decimal valorTotal = CalcularTotalDecimal(); // Calcula o total da venda
+                                string queryVenda = "INSERT INTO venda (data, id_cliente, total_venda, situacao_venda) VALUES (@data, @id_cliente, @total_venda, @situacao_venda)";
+
+                                int idVenda = 0; // Para armazenar o ID da venda inserida
+
+                                using (MySqlCommand cmdVenda = new MySqlCommand(queryVenda, connection, transaction))
                                 {
-                                    string nomeProduto = row.Cells["Nome"].Value.ToString();
-                                    int quantidadeVendida;
+                                    cmdVenda.Parameters.AddWithValue("@data", DateTime.Now);
+                                    cmdVenda.Parameters.AddWithValue("@id_cliente", idCliente);
+                                    cmdVenda.Parameters.AddWithValue("@total_venda", valorTotal);
+                                    cmdVenda.Parameters.AddWithValue("@situacao_venda", "Finalizada");
 
-                                    if (row.Cells["Quantidade"].Value != null && int.TryParse(row.Cells["Quantidade"].Value.ToString(), out quantidadeVendida))
+                                    cmdVenda.ExecuteNonQuery();
+                                    // Obter o ID da venda recém-inserida
+                                    idVenda = (int)cmdVenda.LastInsertedId;
+                                }
+
+                                // Adicionar itens na tabela itemvenda
+                                string queryItemVenda = "INSERT INTO itemvenda (id_venda, numeroItem, idProduto, quantidade, valor_unitario, total_item) VALUES (@id_venda, @numeroItem, @idProduto, @quantidade, @valor_unitario, @total_item)";
+
+                                using (MySqlCommand cmdItemVenda = new MySqlCommand(queryItemVenda, connection, transaction))
+                                {
+                                    foreach (DataGridViewRow row in dataGridViewVendas.Rows)
                                     {
-                                        // Verifica a quantidade em estoque
-                                        string estoqueQuery = "SELECT quantidade_estoque FROM produto WHERE nome = @nome";
-                                        using (MySqlCommand estoqueCmd = new MySqlCommand(estoqueQuery, connection))
+                                        if (row.Cells["Nome"].Value != null)
                                         {
-                                            estoqueCmd.Parameters.AddWithValue("@nome", nomeProduto);
-                                            object resultado = estoqueCmd.ExecuteScalar();
+                                            // Aqui você deve obter o ID do produto
+                                            string nomeProduto = row.Cells["Nome"].Value.ToString();
+                                            int quantidadeVendida = Convert.ToInt32(row.Cells["Quantidade"].Value);
+                                            decimal valorUnitario = Convert.ToDecimal(row.Cells["Preço"].Value);
+                                            decimal totalItem = quantidadeVendida * valorUnitario; // Total para o item
 
-                                            if (resultado != null)
-                                            {
-                                                int quantidadeEmEstoque = Convert.ToInt32(resultado);
+                                            // Obter o ID do produto com base no nome (ou pode ser feito com um método diferente)
+                                            int idProduto = ObterIdProduto(nomeProduto, connection, transaction);
 
-                                                if (quantidadeEmEstoque >= quantidadeVendida)
-                                                {
-                                                    cmd.Parameters.Clear();
-                                                    cmd.Parameters.AddWithValue("@quantidade", quantidadeVendida);
-                                                    cmd.Parameters.AddWithValue("@nome", nomeProduto);
+                                            // Preencher os parâmetros do comando
+                                            cmdItemVenda.Parameters.Clear();
+                                            cmdItemVenda.Parameters.AddWithValue("@id_venda", idVenda);
+                                            cmdItemVenda.Parameters.AddWithValue("@numeroItem", row.Index + 1); // O número do item pode ser a posição na lista
+                                            cmdItemVenda.Parameters.AddWithValue("@idProduto", idProduto);
+                                            cmdItemVenda.Parameters.AddWithValue("@quantidade", quantidadeVendida);
+                                            cmdItemVenda.Parameters.AddWithValue("@valor_unitario", valorUnitario);
+                                            cmdItemVenda.Parameters.AddWithValue("@total_item", totalItem);
 
-                                                    try
-                                                    {
-                                                        cmd.ExecuteNonQuery();
-                                                    }
-                                                    catch (MySqlException ex)
-                                                    {
-                                                        MessageBox.Show("Erro ao realizar venda: " + ex.Message);
-                                                    }
-                                                }
-                                            }
+                                            // Executa o comando para inserir o item na tabela
+                                            cmdItemVenda.ExecuteNonQuery();
                                         }
                                     }
                                 }
+
+                                // Atualiza o estoque
+                                string queryAtualizaEstoque = "UPDATE produto SET quantidade_estoque = quantidade_estoque - @quantidade WHERE id_produto = @id_produto";
+                                using (MySqlCommand cmdAtualizaEstoque = new MySqlCommand(queryAtualizaEstoque, connection, transaction))
+                                {
+                                    foreach (DataGridViewRow row in dataGridViewVendas.Rows)
+                                    {
+                                        if (row.Cells["Nome"].Value != null)
+                                        {
+                                            string nomeProduto = row.Cells["Nome"].Value.ToString();
+                                            int quantidadeVendida = Convert.ToInt32(row.Cells["Quantidade"].Value);
+                                            int idProduto = ObterIdProduto(nomeProduto, connection, transaction); // Obter ID do produto
+
+                                            cmdAtualizaEstoque.Parameters.Clear();
+                                            cmdAtualizaEstoque.Parameters.AddWithValue("@quantidade", quantidadeVendida);
+                                            cmdAtualizaEstoque.Parameters.AddWithValue("@id_produto", idProduto);
+
+                                            cmdAtualizaEstoque.ExecuteNonQuery();
+                                        }
+                                    }
+                                }
+
+                                // Aqui você deve chamar a função GerarContasAReceber
+                                int numeroParcelas = string.IsNullOrWhiteSpace(txtParcelas.Text) ? 1 : int.Parse(txtParcelas.Text); // Define o número de parcelas
+                                DateTime dataLancamento = DateTime.Now; // Define a data de lançamento
+                                GerarContasAReceber(idCliente, valorTotal, numeroParcelas, dataLancamento);
+
+                                // Confirma a transação
+                                transaction.Commit();
+                                MessageBox.Show("Venda realizada com sucesso!");
+                                LimparCampos();
+                                CarregarProdutos();
                             }
-
-                            // Aqui você deve chamar a função GerarContasAReceber
-                            int idCliente = (int)comboBoxClientes.SelectedValue; // Pega o ID do cliente selecionado
-                            decimal valorTotal = CalcularTotalDecimal(); // Calcula o total da venda
-                            int numeroParcelas = string.IsNullOrWhiteSpace(txtParcelas.Text) ? 1 : int.Parse(txtParcelas.Text); // Define o número de parcelas
-                            DateTime dataLancamento = DateTime.Now; // Define a data de lançamento
-
-                            GerarContasAReceber(idCliente, valorTotal, numeroParcelas, dataLancamento);
-
-                            MessageBox.Show("Venda realizada com sucesso!");
-                            LimparCampos();
-                            CarregarProdutos();
+                            catch (Exception ex)
+                            {
+                                transaction.Rollback();
+                                MessageBox.Show("Erro ao realizar venda: " + ex.Message);
+                            }
                         }
                     }
                     else
@@ -287,6 +324,18 @@ namespace SistemaComercio1
             else
             {
                 MessageBox.Show("Não há produtos na venda.");
+            }
+        }
+
+        private int ObterIdProduto(string nomeProduto, MySqlConnection connection, MySqlTransaction transaction)
+        {
+            // Método para obter o ID do produto pelo nome
+            string query = "SELECT id_produto FROM produto WHERE nome = @nome";
+            using (MySqlCommand cmd = new MySqlCommand(query, connection, transaction))
+            {
+                cmd.Parameters.AddWithValue("@nome", nomeProduto);
+                object result = cmd.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : 0; // Retorna 0 se não encontrar
             }
         }
         private void LimparCampos()
@@ -393,6 +442,11 @@ namespace SistemaComercio1
                 txtParcelas.Enabled = false; // Desabilita o campo de parcelas
                 txtParcelas.Text = ""; // Limpa o campo quando não for cartão de crédito
             }
+        }
+
+        private void txtNomeProduto_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
