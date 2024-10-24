@@ -39,15 +39,15 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.txtParcelas = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.cbPagamento = new System.Windows.Forms.ComboBox();
             this.buttonFinalizarVenda = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.txtTotal = new System.Windows.Forms.TextBox();
             this.Carrinho = new System.Windows.Forms.Label();
             this.dataGridViewVendas = new System.Windows.Forms.DataGridView();
-            this.cbPagamento = new System.Windows.Forms.ComboBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtParcelas = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewProdutos)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewVendas)).BeginInit();
@@ -76,6 +76,7 @@
             this.dataGridViewProdutos.Location = new System.Drawing.Point(24, 66);
             this.dataGridViewProdutos.Name = "dataGridViewProdutos";
             this.dataGridViewProdutos.ReadOnly = true;
+            this.dataGridViewProdutos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewProdutos.Size = new System.Drawing.Size(351, 150);
             this.dataGridViewProdutos.TabIndex = 2;
             this.dataGridViewProdutos.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewProdutos_CellContentClick);
@@ -96,6 +97,7 @@
             this.txtNomeProduto.Name = "txtNomeProduto";
             this.txtNomeProduto.Size = new System.Drawing.Size(100, 20);
             this.txtNomeProduto.TabIndex = 4;
+            this.txtNomeProduto.TextChanged += new System.EventHandler(this.txtNomeProduto_TextChanged);
             // 
             // txtValorProduto
             // 
@@ -155,6 +157,45 @@
             this.panel1.Size = new System.Drawing.Size(356, 408);
             this.panel1.TabIndex = 10;
             // 
+            // txtParcelas
+            // 
+            this.txtParcelas.Location = new System.Drawing.Point(139, 292);
+            this.txtParcelas.Name = "txtParcelas";
+            this.txtParcelas.Size = new System.Drawing.Size(115, 20);
+            this.txtParcelas.TabIndex = 8;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(22, 292);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(51, 13);
+            this.label7.TabIndex = 7;
+            this.label7.Text = "Parcelas:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(22, 266);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(111, 13);
+            this.label6.TabIndex = 6;
+            this.label6.Text = "Forma de Pagamento:";
+            // 
+            // cbPagamento
+            // 
+            this.cbPagamento.FormattingEnabled = true;
+            this.cbPagamento.Items.AddRange(new object[] {
+            "Especie",
+            "Cartao de Debito",
+            "Cartao de Credito",
+            "Pix"});
+            this.cbPagamento.Location = new System.Drawing.Point(139, 259);
+            this.cbPagamento.Name = "cbPagamento";
+            this.cbPagamento.Size = new System.Drawing.Size(115, 21);
+            this.cbPagamento.TabIndex = 5;
+            this.cbPagamento.SelectedIndexChanged += new System.EventHandler(this.cbPagamento_SelectedIndexChanged);
+            // 
             // buttonFinalizarVenda
             // 
             this.buttonFinalizarVenda.Location = new System.Drawing.Point(25, 360);
@@ -197,45 +238,6 @@
             this.dataGridViewVendas.Name = "dataGridViewVendas";
             this.dataGridViewVendas.Size = new System.Drawing.Size(322, 150);
             this.dataGridViewVendas.TabIndex = 0;
-            // 
-            // cbPagamento
-            // 
-            this.cbPagamento.FormattingEnabled = true;
-            this.cbPagamento.Items.AddRange(new object[] {
-            "Especie",
-            "Cartao de Debito",
-            "Cartao de Credito",
-            "Pix"});
-            this.cbPagamento.Location = new System.Drawing.Point(139, 259);
-            this.cbPagamento.Name = "cbPagamento";
-            this.cbPagamento.Size = new System.Drawing.Size(115, 21);
-            this.cbPagamento.TabIndex = 5;
-            this.cbPagamento.SelectedIndexChanged += new System.EventHandler(this.cbPagamento_SelectedIndexChanged);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(22, 266);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(111, 13);
-            this.label6.TabIndex = 6;
-            this.label6.Text = "Forma de Pagamento:";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(22, 292);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(51, 13);
-            this.label7.TabIndex = 7;
-            this.label7.Text = "Parcelas:";
-            // 
-            // txtParcelas
-            // 
-            this.txtParcelas.Location = new System.Drawing.Point(139, 292);
-            this.txtParcelas.Name = "txtParcelas";
-            this.txtParcelas.Size = new System.Drawing.Size(115, 20);
-            this.txtParcelas.TabIndex = 8;
             // 
             // ControleVendas
             // 
